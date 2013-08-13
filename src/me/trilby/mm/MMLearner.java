@@ -130,6 +130,7 @@ public class MMLearner {
     mm.setTransitionMatrix(tMatrix);
   }
   
+  
   //internel learner
   private void _learnFreq (MarkovChain mm, Observation[] o) {    
     int nOrder = mm.getOrder();

@@ -44,17 +44,7 @@ public class MMPredictor {
    * @param obs
    */
   public Observation predict(MarkovChain mm, Observation[] obs) throws MalformedModelException  {    
-    if (markovPredictor == null) throw new MalformedModelException();
-    
-    int nOrder = mm.getOrder();
-    Observation[] currentContext = Arrays.copyOfRange(obs, obs.length-nOrder, obs.length);
-    
-    int state = markovPredictor.getNext(mm, currentContext);
-    
-    if (state >= 0)
-      return mm.getStates().get(state);   
-    else
-      return null;
+      return _predictState(mm, obs, null, null);
   }
   
   /**
@@ -65,17 +55,7 @@ public class MMPredictor {
    * @param constraint
    */
   public Observation predict(MarkovChain mm, Observation[] obs, Observation[] constraint) throws MalformedModelException  {    
-    if (markovPredictor == null) throw new MalformedModelException();
-    
-    int nOrder = mm.getOrder();
-    Observation[] currentContext = Arrays.copyOfRange(obs, obs.length-nOrder, obs.length);
-    
-    int state = markovPredictor.getNextWithConstraint(mm, currentContext, constraint);
-    
-    if (state >= 0)
-      return mm.getStates().get(state);   
-    else
-      return null;
+    return _predictState(mm, obs, null, constraint);
   }
   
   /**
@@ -86,17 +66,7 @@ public class MMPredictor {
    * @param info
    */
   public Observation predict(MarkovChain mm, Observation[] obs, Observation info) throws MalformedModelException  {    
-    if (markovPredictor == null) throw new MalformedModelException();
-    
-    int nOrder = mm.getOrder();
-    Observation[] currentContext = Arrays.copyOfRange(obs, obs.length-nOrder, obs.length);
-    
-    int state = markovPredictor.getNext(mm, currentContext, info);
-    
-    if (state >= 0)
-      return mm.getStates().get(state);   
-    else
-      return null;
+    return _predictState(mm, obs, info, null);
   }
   
   /**
@@ -108,12 +78,28 @@ public class MMPredictor {
    * @param constraint
    */
   public Observation predict(MarkovChain mm, Observation[] obs, Observation info, Observation[] constraint) throws MalformedModelException  {    
+    return _predictState(mm, obs, info, constraint);
+  }
+  
+  
+  //internal predictor
+  public Observation _predictState(MarkovChain mm, Observation[] obs, Observation info, Observation[] constraint) throws MalformedModelException {
     if (markovPredictor == null) throw new MalformedModelException();
     
     int nOrder = mm.getOrder();
     Observation[] currentContext = Arrays.copyOfRange(obs, obs.length-nOrder, obs.length);
     
-    int state = markovPredictor.getNextWithConstraint(mm, currentContext, info, constraint);
+    int state;
+    
+    if ((info == null) && (constraint == null))
+      state = markovPredictor.getNext(mm, currentContext);
+    else if (info == null)
+      state = markovPredictor.getNext(mm, currentContext, constraint);
+    else if (constraint == null)
+      state = markovPredictor.getNext(mm, currentContext, info);
+    else
+      state = markovPredictor.getNext(mm, currentContext, info, constraint);
+    
     
     if (state >= 0)
       return mm.getStates().get(state);   

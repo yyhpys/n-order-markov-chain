@@ -31,7 +31,7 @@ public abstract class Predictor {
     return _getNext(mm, fromIndex);
   }
   
-  public int getNextWithConstraint(MarkovChain mm, Observation[] currentContext, Observation[] constraint) {
+  public int getNext(MarkovChain mm, Observation[] currentContext, Observation[] constraint) {
     int fromIndex = mm.getMatrixIndex(currentContext);
     
     constraintIndex = new ArrayList<Integer>();
@@ -50,7 +50,7 @@ public abstract class Predictor {
     return _getNext(mm, fromIndex);
   }
   
-  public int getNextWithConstraint(MarkovChain mm, Observation[] currentContext, Observation currentInfo, Observation[] constraint) {
+  public int getNext(MarkovChain mm, Observation[] currentContext, Observation currentInfo, Observation[] constraint) {
     int fromIndex = mm.getMatrixIndex(currentContext, currentInfo);
 
     constraintIndex = new ArrayList<Integer>();
@@ -61,5 +61,5 @@ public abstract class Predictor {
   }
 
   
-  protected abstract int _getNext(MarkovChain mm, int fromIndex);
+  protected abstract int _getNext(MarkovChain mm, int fromIndex); //TODO: getNext as simple comparator or rank calculator
 }
