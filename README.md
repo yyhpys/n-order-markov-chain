@@ -16,6 +16,7 @@ To-do
 * Tie-break option
 * Remove ambiguity of 'state' and 'observation'
 * Example of usage
+* Library...
 * and blabla...
 
 
